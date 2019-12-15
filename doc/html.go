@@ -1,15 +1,16 @@
 package doc
 
-const Template = `
-<!DOCTYPE html>
+const Template = `<!DOCTYPE html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>Online API Documentation</title>
+    <title>Online API Documentation </title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-    <script src="http://code.jquery.com/jquery-2.1.3.min.js"/>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"/>
+    <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
     <style type="text/css">
         body {
             font-family: 'Roboto', sans-serif;
@@ -50,7 +51,7 @@ const Template = `
         pre.prettyprint {
             border: 1px solid #ccc;
             margin-bottom: 0;
-            padding: 10px;
+            padding: 9.5px;
         }
     </style>
     <script>
@@ -83,6 +84,7 @@ const Template = `
 <body>
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
                     data-target="#bs-example-navbar-collapse-1">
@@ -94,7 +96,10 @@ const Template = `
             <a class="navbar-brand" href="#">{{.Title}}</a>
             <p class="navbar-text">Developed by <a href="http://github.com/var-rain/">var-rain</a></p>
         </div>
+
+        <!-- /.navbar-collapse -->
     </div>
+    <!-- /.container-fluid -->
 </nav>
 <div class="container-fluid" style="margin-top: 70px;margin-bottom: 20px;">
     <div class="container-fluid">
@@ -168,6 +173,7 @@ const Template = `
                         <pre id="request-body-{{$key}}-{{$wrapperKey}}"
                              class="prettyprint">{{ $wrapperValue.RequestBody }}</pre>
                         <script>
+                            /* Parse then stringify to add proper spacing */
                             var requestHeader ={{ $wrapperValue.RequestHeader }};
 
                             if (requestHeader["Content-Type"].includes("application/json")) {
@@ -175,7 +181,7 @@ const Template = `
                                     var jsonStr = spaceJson({{ $wrapperValue.RequestBody }});
                                     document.getElementById('request-body-{{$key}}-{{$wrapperKey}}').innerHTML = syntaxHighlight(jsonStr);
                                 } catch (e) {
-                                    
+                                    /* Invalid JSON - Do not syntax highlight. */
                                 }
                             }
                         </script>
@@ -202,6 +208,7 @@ const Template = `
                         <pre class="prettyprint"
                              id="response-body-{{$key}}-{{$wrapperKey}}">{{ $wrapperValue.ResponseBody }}</pre>
                         <script>
+                            /* Parse then stringify to add proper spacing */
                             var responseHeader ={{ $wrapperValue.ResponseHeader }};
 
                             if (responseHeader["Content-Type"].includes("application/json")) {
@@ -209,7 +216,7 @@ const Template = `
                                     var jsonStr = spaceJson({{ $wrapperValue.ResponseBody }});
                                     document.getElementById('response-body-{{$key}}-{{$wrapperKey}}').innerHTML = syntaxHighlight(jsonStr);
                                 } catch (e) {
-                                    
+                                    /* Invalid JSON - Do not syntax highlight. */
                                 }
                             }
                         </script>
@@ -223,5 +230,4 @@ const Template = `
 </div>
 <hr>
 </body>
-</html>
-`
+</html>`
