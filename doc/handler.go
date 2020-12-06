@@ -1,12 +1,12 @@
 package doc
 
 import (
-	"bytes"
-	"github.com/kataras/iris/v12/context"
+	"github.com/kataras/iris/v12"
+	"strings"
 )
 
-func New() context.Handler {
-	return func(ctx context.Context) {
+func New() iris.Handler {
+	return func(ctx iris.Context) {
 		if !IsOn() {
 			ctx.Next()
 			return
@@ -15,13 +15,22 @@ func New() context.Handler {
 		call := &Call{}
 		Before(call, ctx.Request())
 
-		ctx.Record()
+		w := ctx.Recorder()
 		ctx.Next()
 
-		r := NewResponseRecorder(ctx.Recorder().Naive())
-		r.Body = bytes.NewBuffer(ctx.Recorder().Body())
-		r.Status = ctx.Recorder().StatusCode()
+		if code := ctx.GetStatusCode(); IsStatusCodeValid(code) {
+			call.MethodType = ctx.Method()
+			call.CurrentPath = strings.Split(ctx.Request().RequestURI, "?")[0]
+			call.ResponseBody = string(w.Body()[0:])
+			call.ResponseCode = code
 
-		After(call, r, ctx.Request())
+			m := make(map[string]string, len(w.Header()))
+			for k, v := range w.Header() {
+				m[k] = strings.Join(v, " ")
+			}
+			call.RequestHeader = m
+
+			go GenerateHtml(call)
+		}
 	}
 }
